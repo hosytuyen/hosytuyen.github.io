@@ -1,333 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="baidu-site-verification" content="code-iOAOI0JVZy" />
+  <meta name="google-site-verification" content="GyZtLOgMwqo606nuH0dpit9QFNGianLtKVW-b7DFX04" />
   <meta charset="utf-8">
-  <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdAM: Parameter-Efficient Few-shot Image Generation</title>
+  
+  <title>Sy-Tuyen Ho</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Sy-Tuyen Ho">
+<meta property="og:url" content="https://hosytuyen.github.io/projects/TL-DMI/index.html">
+<meta property="og:site_name" content="Sy-Tuyen Ho">
+<meta property="og:locale" content="en_US">
+<meta property="article:tag" content="Sy-Tuyen Ho">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Sy-Tuyen Ho" type="application/atom+xml">
+  
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0.css">
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+  
+<link rel="stylesheet" href="/lib/fancybox/dist/jquery.fancybox.min.css">
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+  
+<link rel="stylesheet" href="/css/main.css">
 
-    gtag('js', new Date());
+  
+<script src="/lib/jquery/dist/jquery.min.js"></script>
 
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-</head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  </div>
-</nav>
-
-
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Few-shot Image Generation via  <br> Adaptation-Aware Kernel Modulation </h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://www.linkedin.com/in/yunqing-zhao/">Yunqing Zhao</a><sup>*</sup>,</span>
-            <span class="author-block">
-              <a href="https://keshik6.github.io/">Keshigeyan Chandrasegaran</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://miladabd.github.io/">Milad Abdollahzadeh</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://sites.google.com/site/mancheung0407/">Ngai-Man Cheung</a><sup>&#8224</sup>
-			      </span><br>
-            <br>
-          </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">Singapore University of Technology and Design (SUTD)</span><br>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://proceedings.neurips.cc/paper_files/paper/2022/file/7b122d0a0dcb1a86ffa25ccba154652b-Paper-Conference.pdf"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <!-- <span class="link-block">
-                <a href=""
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span> -->
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://neurips.cc/media/PosterPDFs/NeurIPS%202022/d0ac1ed0c5cb9ecbca3d2496ec1ad984.png"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Poster</span>
-                  </a>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://drive.google.com/file/d/1hNSIlu0zhjGvqq-gG928jIICCCxuhFHz/view"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Slides</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/yunqing-me/AdAM"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-2" >Abstract</h2>
-        <div class="content has-text-justified">
-        <p>
-			    Few-shot image generation (FSIG) aims to learn to generate new and diverse samples given an extremely limited number of samples from a domain, e.g., 10 training samples. 
-          Recent work has addressed the problem using transfer learning approach, leveraging a GAN pretrained on a large-scale source domain dataset and adapting 
-          that model to the target domain based on very limited target domain samples. Central to recent FSIG methods are knowledge preserving criteria, 
-          which aim to select a subset of source model's knowledge to be preserved into the adapted model. 
-        </p>
-        <p>
-          However, a major limitation of existing methods is that their knowledge preserving criteria consider only source domain/source task, 
-          and they fail to consider target domain/adaptation task in selecting source model's knowledge, 
-          casting doubt on their suitability for setups of different proximity between source and target domain. 
-          Our work makes two contributions. As our first contribution, we re-visit recent FSIG works and their experiments. 
-          Our important finding is that, under setups which assumption of close proximity between source and target domains is relaxed, 
-          existing state-of-the-art (SOTA) methods which consider only source domain/source task in knowledge preserving perform no better than a baseline fine-tuning method. 
-          To address the limitation of existing methods, as our second contribution, 
-          we propose adaptation-aware kernel modulation to address general FSIG of different source-target domain proximity. 
-          Extensive experimental results show that the proposed method consistently achieves SOTA performance across source/target domains of different proximity, 
-          including challenging setups when source and target domains are more apart.
-        </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-    <div class="columns is-centered">
-
-      </div>
-    </div>
-
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Overview</h2>
-
-        <div class="content has-text-justified">
-			<center>
-				<table align=center width=880px>
-					<tr>
-						<td width=260px>
-							<center>
-								<img class="round" style="width:880px" src="./resources/overview.png"/>
-							</center>
-						</td>
-					</tr>
-				</table>
-				<table align=center width=880px>
-					<tr>
-						<td>
-							<p style="text-align:justify; text-justify:inter-ideograph;">
-                <h4 class="title is-5">Contributions</h4>
-							<b>1: </b>
-							We consider the problem of FSIG with Transfer Learning using very limited target samples (e.g., 10-shot). <br>
-							<b>2: </b>
-							Our work makes two contributions: 
-							<ul>
-								<li>We discover that when the close proximity assumption between source-target domain is relaxed, SOTA FSIG methods, e.g., EWC (Li et al.), CDC (Ojha et al.), DCL (Zhao et al.), 
-                  which consider only source domain/source task in knowledge preserving perform no better than a baseline fine-tuning method, e.g., TGAN, (Wang et al.).</li>
-								<li>We propose a novel adaptation-aware kernel modulation for FSIG that achieves SOTA performance across source / target domains with different proximity. </li>
-							</ul>
-							<b>3: </b>
-							Schematic diagram of our proposed Importance Probing Mechanism: 
-              We measure the importance of each kernel for the target domain after probing and preserve source domain knowledge that is important for target domain adaptation. 
-              The same operations are applied to discriminator.
-						</td>
-					</tr>
-				</table>
-				<table align=center width=880px>
-					<tr>
-						<td width=260px>
-
-						</td>
-					</tr>
-				</table>
-			</center>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Experiment Results</h2>
-
-        <div class="content has-text-justified">
-			<center>
-				<table align=center width=880px>
-					<tr>
-						<td width=260px>
-							<center>
-								<img class="round" style="width:880px" src="./resources/babies_compare.png"/>
-							</center>
-							<center>
-								<img class="round" style="width:880px" src="./resources/cats_compare.png"/>
-							</center>
-						</td>
-					</tr>
-				</table>
-        <table align=center width=850px>
-          <center>
-            <tr>
-              <td>
-                <p style="text-align:justify; text-justify:inter-ideograph;"> 
-                  <b>Qualitative and quantitative comparison of 10-shot image generation with different FSIG methods.</b>
-                  Images of each column are from the same noise input (Last row).
-                  <b>Left</b>:
-                  10-shot real target samples for adaptation.
-                  <b>Mid, Right:</b>: For target domain with close proximity (e.g.Babies, top),
-                  our method can generate high quality images with more refined details and diversity knowledge,
-                  achieving best FID and Intra-LPIPS socre. For target domain which is distant (e.g., Cat, bottom),
-                  TGAN/FreezeD overfit to the 10-shot samples and others fail. In contrast, our method preserves
-                  meaningful semantic features at different levels (e.g., posture and color) from source, achieving a
-                  good trade off between quality and diversity. In particular, our Intra-LPIPS approaches that of EWC,
-                  while our generated images have much better quality qualitatively and quantitatively
-              </td>
-            </tr>
-          </center>
-        </table>
-			</center>
-        </div>
-      </div>
-    </div>
-
-    
-  </div>
-</section>
-
-
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <p>
-        If you find our research useful in your work, please consider citing our paper:  
-    </p>
-    <pre><code>@inproceedings{zhao2022fewshot,
-      title={Few-shot Image Generation via Adaptation-Aware Kernel Modulation},
-      author={Yunqing Zhao and Keshigeyan Chandrasegaran and Milad Abdollahzadeh and Ngai-man Cheung},
-      booktitle={Advances in Neural Information Processing Systems},
-      editor={Alice H. Oh and Alekh Agarwal and Danielle Belgrave and Kyunghyun Cho},
-      year={2022},
-      url={https://openreview.net/forum?id=Z5SE9PiAO4t}
-    }</code></pre>
-          <div class="content has-text-justified">
-            <p>
-				Meanwhile, we also demonstrate a relevant research for few-shot image generation, via Removing In-Compatible Knowledge (<a href="https://yunqing-me.github.io/RICK/">RICK</a>, CVPR-2023) for few-shot Transfer to fine-tune the pretrained GANs: </a>
-            </p>
-            <pre><code>@inproceedings{zhao2023exploring,
-              title={Exploring incompatible knowledge transfer in few-shot image generation},
-              author={Zhao, Yunqing and Du, Chao and Abdollahzadeh, Milad and Pang, Tianyu and Lin, Min and Yan, Shuicheng and Cheung, Ngai-Man},
-              booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-              pages={7380--7391},
-              year={2023}
-            }</code></pre>
-          </div>
-  </div>
-</section>
-
-
-<footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This project page is constructed using the wonderful template provided by <a
-            href="https://nerfies.github.io/">Nerfies</a>.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
+<p>To Be Updated After Clearance</p>
 
 </body>
 </html>
