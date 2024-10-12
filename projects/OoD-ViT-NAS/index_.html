@@ -48,7 +48,7 @@
         <h2 class="display-1" style="text-align:center; font-weight:bold; font-size:1.5em;letter-spacing:2.0px;">Abstract</h2>
         <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
             <p class="lead" style="text-align:left;font-size:1.25em;">
-                Model Inversion (MI) attacks aim to reconstruct private training data by abusing access to machine learning models. Contemporary MI attacks have achieved impressive attack performance, posing serious threats to privacy. Meanwhile, all existing MI defense methods rely on regularization that is in direct conflict with the training objective, resulting in noticeable degradation in model utility. <strong>In this work</strong>, we take a different perspective, and  propose a novel and simple Transfer Learning-based Defense against Model Inversion (TL-DMI) to render MI-robust models. Particularly, by leveraging TL, we limit the number of  layers encoding sensitive information from private training dataset, thereby degrading the performance of  MI attack. We conduct an analysis using Fisher Information to justify our method. Our defense is remarkably simple to implement. Without bells and whistles, we show in extensive experiments that TL-DMI achieves state-of-the-art (SOTA) MI robustness. 
+                While Vision Transformer (ViT) have achieved success across various machine learning tasks, deploying them in real-world scenarios faces a critical challenge: generalizing under Out-of-Distribution (OoD) shifts. A crucial research gap remains in understanding how to design ViT architectures, both manually and automatically, to excel in OoD generalization. \<strong>To address this gap</strong>, we introduce OoD-ViT-NAS, the first systematic benchmark for ViT Neural Architecture Search (NAS) focused on OoD generalization. This comprehensive benchmark includes $3,000$ ViT architectures of varying model computational budgets evaluated on $8$ common large-scale OoD datasets. With this comprehensive benchmark at hand, we analyze the factors that contribute to the OoD generalization of ViT architecture. Our analysis uncovers several key insights. Firstly, we show that ViT architecture designs have a considerable impact on OoD generalization. Secondly, we observe that In-Distribution (ID) accuracy might not be a very good indicator of OoD accuracy. This underscores the risk that ViT architectures optimized for ID accuracy might not perform well under OoD shifts. Thirdly, we conduct the first study to explore NAS for ViT's OoD robustness. Specifically, we study $9$ Training-free NAS for their OoD generalization performance on our benchmark. We observe that existing Training-free NAS are largely ineffective in predicting OoD accuracy despite their effectiveness at predicting ID accuracy. Moreover, simple proxies like \#Param or \#Flop surprisingly outperform more complex Training-free NAS in predicting ViTs OoD accuracy. Finally, we study how ViT architectural attributes impact OoD generalization. We discover that increasing embedding dimensions of a ViT architecture generally can improve the OoD generalization. We show that ViT architectures in our benchmark exhibit a wide range of OoD accuracy, with up to $11.85\%$ for some OoD shift, prompting the importance to study ViT architecture design for OoD. We firmly believe that our OoD-ViT-NAS benchmark and our analysis can catalyze and streamline important research on understanding how ViT architecture designs influence OoD generalization. Our OoD-NAS-ViT benchmark and code are available at https://hosytuyen.github.io/projects/OoD-ViT-NAS
             </p>
 
     </div>
@@ -77,12 +77,10 @@
             
         <pre class="lead" style="text-align:left;font-size:1.0em;white-space: pre-line;">
             <code>@InProceedings{Ho_2024_CVPR,
-                author    = {Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man},
-                title     = {Model Inversion Robustness: Can Transfer Learning Help?},
-                booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-                month     = {June},
-                year      = {2024},
-                pages     = {12183-12193}
+                author    = {Ho, Sy-Tuyen and Van Vo, Tuan and Ebrahimkhani, Somayeh and Cheung, Ngai-Man},
+                title     = {Vision Transformer Neural Architecture Search for Out-of-Distribution Generalization: Benchmark and Insights},
+                booktitle={Thirty-seventh Conference on Neural Information Processing Systems}, 
+                year={2024},
             }
 }</code>
         </pre>
@@ -95,7 +93,7 @@
         <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
             
             <p class="lead" style="text-align:left;font-size:1.25em;">
-                This research is supported by the National Research Foundation, Singapore under its AI Singapore Programmes (AISG Award No.: AISG2-TC-2022-007); The Agency for Science, Technology and Research (A*STAR) under its MTC Programmatic Funds (Grant No. M23L7b0021). This material is based on the research/work support in part by the Changi General Hospital and Singapore University of Technology and Design, under the HealthTech Innovation Fund (HTIF Award No. CGHSUTD-2021-004).
+                This research is supported by the National Research Foundation, Singapore under its AI Singapore Programmes (AISG Award No.: AISG2-TC-2022-007); The Agency for Science, Technology and Research (A*STAR) under its MTC Programmatic Funds (Grant No. M23L7b0021). This research is supported by the National Research Foundation, Singapore and Infocomm Media Development Authority under its Trust Tech Funding Initiative. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore and Infocomm Media Development Authority.
             </p>
 
     </div>
