@@ -1,0 +1,107 @@
+<!doctype html>
+<title>Model Inversion Robustness: Can Transfer Learning Help?</title>
+    <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- If IE use the latest rendering engine -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Set the page to the width of the device and set the zoon level -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+    <!-- page-header-->
+    <div class="jumbotron" style="background-color:#ffffff;">
+        <div class="container" style="font-family:'Times New Roman',serif;margin-bottom:-35px;margin-top:-20px">
+            <h1 class="display-1" style="text-align:center; font-weight:bold; font-size:2.0em;letter-spacing:2.0px;">
+                Model Inversion Robustness: Can Transfer Learning Help?</h1>
+            <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
+            
+            <p class="lead" style="text-align:center;font-size:1.25em;">
+                <a href="https://hosytuyen.github.io" font color="#ffffff">Sy-Tuyen Ho</a> |
+                <a href="https://scholar.google.com/citations?user=PN-tchoAAAAJ&hl=en" font color="#ffffff">Koh Jun Hao</a> |
+                <a href="https://keshik6.github.io/">Keshigeyan Chandrasegaran</a> |
+                <a href="https://scholar.google.com/citations?user=zQPES6kAAAAJ&hl=vi" font color="#ffffff">Ngoc-Bao Nguyen</a> |
+                <a href="https://sites.google.com/site/mancheung0407/">Ngai-Man Cheung</a> </br>
+            Singapore University of Technology and Design (SUTD)<br/>
+            <em>CVPR 2024</br></em>
+            </p>
+                
+                
+            <p class="lead" style="text-align:center;font-size:1.25em;"> 
+                <a href="https://arxiv.org/abs/2405.05588">Paper</a> |
+                <a href="https://github.com/hosytuyen/TL-DMI">Github</a> 
+            </p>         
+                
+        </div>
+    </div>
+
+
+    
+    <!-- Abstract -->
+    <div class="container" style="font-family:'Times New Roman',serif">
+        <h2 class="display-1" style="text-align:center; font-weight:bold; font-size:1.5em;letter-spacing:2.0px;">Abstract</h2>
+        <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
+            <p class="lead" style="text-align:left;font-size:1.25em;">
+                Model Inversion (MI) attacks aim to reconstruct private training data by abusing access to machine learning models. Contemporary MI attacks have achieved impressive attack performance, posing serious threats to privacy. Meanwhile, all existing MI defense methods rely on regularization that is in direct conflict with the training objective, resulting in noticeable degradation in model utility. <strong>In this work</strong>>, we take a different perspective, and  propose a novel and simple Transfer Learning-based Defense against Model Inversion (TL-DMI) to render MI-robust models. Particularly, by leveraging TL, we limit the number of  layers encoding sensitive information from private training dataset, thereby degrading the performance of  MI attack. We conduct an analysis using Fisher Information to justify our method. Our defense is remarkably simple to implement. Without bells and whistles, we show in extensive experiments that TL-DMI achieves state-of-the-art (SOTA) MI robustness. 
+            </p>
+
+    </div>
+
+    <!-- Method -->
+
+    <div class="container" style="font-family:'Times New Roman',serif">
+        <figure>                
+            <div class="col-md-12 text-center">
+                <img src="./assets/images/Overall.png" alt="Inverted examples" style="width:100%;height:100%;">
+            </div>
+        
+            <figcaption>(I) <strong>Our proposed Transfer Learning-based Defense against Model Inversion (TL-DMI)</strong>. Based on standard TL framework with pre-training (on public dataset) followed by fine-tuning (on private dataset), we propose a simple and highly-effective method to defend against MI attacks. Our idea is to limit fine-tuning with private dataset to a specific number of layers, thereby limiting the encoding of private information to these layers only (pink layers). Specifically, we propose to perform fine-tuning only on the last several layers. <strong>(II) Analysis of layer importance for classification task and MI task</strong>. For the first time, we analyze importance of target model layers for MI. For a model trained with conventional training, we apply FI and find that the first few layers of the model are important for MI. Meanwhile, FI analysis suggests that last several layers are important for a specific classification task, consistent with TL literature. This supports our hypothesis that preventing the fine-tuning of the first few layers on private dataset could degrade MI significantly, while such impact for classification could be small. Overall, this leads to improved MI robustness. <strong>(III) Empirical validation</strong>. The sub-figures clearly show that at the same natural accuracy, lower MI attack accuracy can be achieved by reducing the number of parameters fine-tuned with private dataset. <strong>Comparison with SOTA MI Defense</strong>(IV). Without bells and whistles, our method achieves SOTA in MI robustness. Visual quality of MI-reconstructed images from our model is inferior. User study confirms this finding. Extensive experiments can be found in Sec.~\ref{Extensive setups}.
+            </figcaption>
+        </figure>
+    </div>
+
+
+    </br>
+
+
+    <!-- Citation -->
+    <div class="container" style="font-family:'Times New Roman',serif">
+        <h2 class="display-1" style="text-align:center; font-weight:bold; font-size:1.5em;letter-spacing:2.0px;">Citation</h2>
+        <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
+            
+        <pre class="lead" style="text-align:left;font-size:1.0em;white-space: pre-line;">
+            <code>@InProceedings{Ho_2024_CVPR,
+                author    = {Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man},
+                title     = {Model Inversion Robustness: Can Transfer Learning Help?},
+                booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+                month     = {June},
+                year      = {2024},
+                pages     = {12183-12193}
+            }
+}</code>
+        </pre>
+    </div>
+
+
+    <!-- Acknowledgements -->
+    <div class="container" style="font-family:'Times New Roman',serif">
+        <h2 class="display-1" style="text-align:center; font-weight:bold; font-size:1.5em;letter-spacing:2.0px;">Acknowledgements</h2>
+        <hr style="border-top: 1px solid #000000; background: transparent;" class="my-4">
+            
+            <p class="lead" style="text-align:left;font-size:1.25em;">
+                This research is supported by the National Research Foundation, Singapore under its AI Singapore Programmes (AISG Award No.: AISG2-TC-2022-007); The Agency for Science, Technology and Research (A*STAR) under its MTC Programmatic Funds (Grant No. M23L7b0021). This material is based on the research/work support in part by the Changi General Hospital and Singapore University of Technology and Design, under the HealthTech Innovation Fund (HTIF Award No. CGHSUTD-2021-004).
+            </p>
+
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</body>
+</html>
