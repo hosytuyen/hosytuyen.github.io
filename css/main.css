@@ -296,36 +296,39 @@ img {
     margin: 8px 0;
   }
 
-  /* Better social links for mobile */
+
+
+  
+
   .social-links {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 15px;
-  }
-
-  .social-links a {
-    display: flex;
+    flex-wrap: wrap;         /* allow wrapping on small screens */
+    gap: 8px;                /* smaller spacing between icons */
+    justify-content: center; /* center the row */
     align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: #f5f5f5;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+    margin-top: 5px;
   }
-
-  .social-links a:hover {
-    background: #e0e0e0;
-    transform: scale(1.1);
-  }
-
+  
   .social-links img {
-    width: 20px;
-    height: 20px;
-    margin: 0;
+    width: 0.5rem;   /* fixed small size (~12px) */
+    height: 0.5rem;
+    transition: transform 0.2s ease;
   }
+  
+  .social-links img:hover {
+    transform: scale(1.1);   /* subtle hover zoom */
+  }
+  
+  /* 📱 Mobile: same fixed size for consistency */
+  @media (max-width: 600px) {
+    .social-links img {
+      width: 0.5rem;   /* same fixed size (~12px) */
+      height: 0.5rem;
+    }
+  }
+  
+  
+  
 
   /* Improved content layout */
   .post-content > div[style*="display: flex"] {
@@ -708,7 +711,7 @@ img {
   overflow-x: auto;
 }
 .post-content figure.highlight .gutter {
-  color: $hight-gutter;
+  color: #999;
 }
 .post-content figure.highlight pre {
   background: #f7f7f7;
@@ -864,7 +867,7 @@ img {
 .post-content hr {
   margin: 40px 0;
   height: 1px;
-  background: $grey;
+  background: #ccc;
   border: none;
 }
 .post-content img {
@@ -912,10 +915,10 @@ img {
 }
 .post-content > table tbody tr {
   height: 20px;
-  border-bottom: 1px solid $grey;
+  border-bottom: 1px solid #ccc;
 }
 .post-content > table tbody tr:nth-child(odd) {
-  background: $grey-250;
+  background: #f5f5f5;
 }
 .post-detail .post-content {
   padding: 0;
