@@ -303,27 +303,64 @@ img {
   .social-links {
     display: flex;
     flex-wrap: wrap;         /* allow wrapping on small screens */
-    gap: 8px;                /* smaller spacing between icons */
+    gap: 16px;               /* increased spacing between icons */
     justify-content: center; /* center the row */
     align-items: center;
     margin-top: 5px;
   }
   
-  .social-links img {
-    width: 0.5rem;   /* fixed small size (~12px) */
-    height: 0.5rem;
-    transition: transform 0.2s ease;
+  .social-link {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 8px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    color: #495057;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
   
-  .social-links img:hover {
-    transform: scale(1.1);   /* subtle hover zoom */
+  .social-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
   }
   
-  /* 📱 Mobile: same fixed size for consistency */
+  /* Specific link styling */
+  .social-link.scholar:hover {
+    background: #4285f4;
+    border-color: #4285f4;
+    color: white;
+  }
+  
+  .social-link.github:hover {
+    background: #333;
+    border-color: #333;
+    color: white;
+  }
+  
+  .social-link.linkedin:hover {
+    background: #0077b5;
+    border-color: #0077b5;
+    color: white;
+  }
+  
+  .social-link.cv:hover {
+    background: #6c757d;
+    border-color: #6c757d;
+    color: white;
+  }
+  
+  /* 📱 Mobile: smaller text and padding */
   @media (max-width: 600px) {
-    .social-links img {
-      width: 0.5rem;   /* same fixed size (~12px) */
-      height: 0.5rem;
+    .social-link {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      margin: 0 3px;
     }
   }
   
