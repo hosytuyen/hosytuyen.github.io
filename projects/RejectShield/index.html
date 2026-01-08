@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RejectShield: Memory Makes The Poison</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#2196f3">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RejectShield: Memory Makes The Poison">
+  <meta property="og:url" content="https://hosytuyen.github.io/projects/RejectShield/">
+  <meta property="og:site_name" content="RejectShield">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0.css">
+  <link rel="stylesheet" href="/lib/fancybox/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+  <script src="/lib/jquery/dist/jquery.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .title {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .authors {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .authors sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-left: 2px;
+    }
+    
+    .affiliations {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .affiliations sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    .venue {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+    
+    .links {
+      margin: 20px 0;
+    }
+    
+    .links a {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    .links a:hover {
+      background-color: #2980b9;
+    }
+    
+    .links a[href="#"] {
+      background-color: #95a5a6;
+      color: #ecf0f1;
+      cursor: not-allowed;
+    }
+    
+    .links a[href="#"]:hover {
+      background-color: #7f8c8d;
+    }
+    
+    .section {
+      margin: 40px 0;
+    }
+    
+    .section h2 {
+      font-size: 1.8em;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    
+    .abstract {
+      font-size: 1.1em;
+      line-height: 1.7;
+      text-align: justify;
+      background-color: #f8f9fa;
+      padding: 25px;
+      border-left: 4px solid #3498db;
+      margin: 20px 0;
+    }
+    
+    .tldr {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    
+    .method-overview {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .result-item {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #28a745;
+    }
+    
+    .code-block {
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    
+    .ethics-section {
+      background-color: #fff5f5;
+      border-left: 4px solid #e53e3e;
+      padding: 20px;
+      margin: 30px 0;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .title {
+        font-size: 2em;
+      }
+      
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1 class="title">Memory Makes The Poison<br>Over Memorization Drives Visual Poisoning in LVLMs</h1>
+    
+    <div class="authors">
+      <strong>Sy-Tuyen Ho</strong><sup>1</sup>, Yaseema Rusiru Ariyarathna Epa<sup>2</sup>, Yasoda Lasiru Ariyarathna Epa<sup>2</sup>, Kecheng Liu<sup>1</sup><br>
+      Xudong Jiang<sup>3</sup>, Alex Kot<sup>3</sup>, Furong Huang<sup>1</sup>, Ngai-Man Cheung<sup>2</sup>
+    </div>
+    
+    <div class="affiliations">
+      <sup>1</sup>University of Maryland, College Park<br>
+      <sup>2</sup>Singapore University of Technology and Design<br>
+      <sup>3</sup>Nanyang Technological University
+    </div>
+    
+
+          
+    <div class="links">
+      <a href="#" target="_blank">Paper (Coming Soon)</a>
+      <a href="#" target="_blank">Code (Coming Soon)</a>
+        </div>      
+    </div>
+
+
+  <div class="section">
+    <h2>Abstract</h2>
+    <div class="tldr">
+        <strong>TL;DR:</strong> Over-memorization in LVLMs significantly amplifies their vulnerability to visual poisoning attacks. We introduce RejectShield, a rejection-based defense that disrupts memorization and reduces attack success by up to 99%.
+      </div>
+
+    <div class="abstract">
+        Large Vision-Language Models (LVLMs) excel across tasks, yet their safety and security remain underexplored. Among emerging threats, LVLM poisoning attacks pose a serious threat by inducing targeted hallucinations in fine-tuned LVLMs. Although effective, the root cause of these attacks remains poorly understood. The attack is originally justified as being effective due to the carefully injected visual perturbations to fine-tuning data, which subtly manipulate the model. Consequently, existing defenses rely on state-of-the-art (SOTA) purification methods, but these have shown ineffective so far.
+        <br><br>
+        In this work, we argue that this gap stems from a more fundamental issue: a limited understanding of LVLM vulnerabilities during fine-tuning. To address this, we systematically study the fine-tuning process and, for the first time, identify over-memorization as the key vulnerability: <em>LVLMs tend to over-memorize fine-tuning concepts, directly leading to hallucinations in fine-tuned models.</em> <strong>Our finding overturns the original justification: the dominant driver is over-memorization of injected concepts, not the visual perturbation.</strong> Guided by this insight, we introduce <strong>RejectShield</strong>, a simple rejection-based defense that explicitly disrupts memorization. Across eight settings spanning attack variants, attack goals, model families, and access regimes, RejectShield reduces attack success by up to <strong>99%</strong> while largely preserving normal performance. Finally, we discuss broader implications of this memorization vulnerability, including evaluation methods that test concept replay and training practices that mitigate memorization pressure.
+        </div>
+    
+    
+        </div>
+
+
+          <div class="section">
+    <h2>Over-Memorization during LVLM Fine-tuning</h2>
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="assets/images/multi_uni.png" alt="Memorization comparison between LVLMs and LLMs" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    
+    <div class="method-overview">
+      <p><strong>Finding 1:</strong> LVLMs tend to over-memorize fine-tuning concepts, leading to hallucinations in fine-tuned models.</p>
+      <p><strong>Finding 2:</strong> Multimodal data exacerbate data memorization in LVLMs, highlighting data memorization as a critical safety vulnerability, particularly for multimodal LVLM architectures.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Our Defense Results</h2>
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="assets/images/defense_result.png" alt="RejectShield defense effectiveness across different models and tasks" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    
+    <div class="method-overview">
+      <p>RejectShield consistently reduces attack success rates to near zero across multiple LVLM architectures and attack scenarios, while maintaining model utility. The pink line shows our defense effectively defends against various poisoning attack scenarios.</p>
+    </div>
+  </div>
+
+
+
+
+  <div class="section">
+    <h2>BibTeX</h2>
+    <div class="code-block">
+        @misc{
+            ho2025memory,
+            title={Memory Makes The Poison: Over Memorization Drives Visual Poisoning in {LVLM}s},
+            author={Sy-Tuyen Ho and Yaseema Rusiru Ariyarathna Epa and Yasoda Lasiru Ariyarathna Epa and Andrew Mendez and Kecheng Liu and Xudong Jiang and Alex Kot and Furong Huang and Ngai-Man Cheung},
+            year={2025},
+            url={https://openreview.net/forum?id=2HGL1Szcp2}
+            }
+      </div>
+  </div>
+  
+  <footer style="text-align: center; padding: 40px 0; margin-top: 40px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #666;">
+    <p><a href="/" style="color: #3498db; text-decoration: none;">← Back to Sy-Tuyen Ho's Homepage</a></p>
+  </footer>
+</body>
+</html>

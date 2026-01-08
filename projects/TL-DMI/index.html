@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TL-DMI: Model Inversion Robustness - Can Transfer Learning Help?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#2196f3">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TL-DMI: Model Inversion Robustness">
+  <meta property="og:url" content="https://hosytuyen.github.io/projects/TL-DMI/">
+  <meta property="og:site_name" content="TL-DMI">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0.css">
+  <link rel="stylesheet" href="/lib/fancybox/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+  <script src="/lib/jquery/dist/jquery.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .title {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .authors {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .authors sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-left: 2px;
+    }
+    
+    .affiliations {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .affiliations sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    .venue {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+    
+    .links {
+      margin: 20px 0;
+    }
+    
+    .links a {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      border: 2px solid #2c3e50;
+    }
+    
+    .links a:hover {
+      background-color: #34495e;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-color: #34495e;
+    }
+    
+    .links a[href="#"] {
+      background-color: #95a5a6;
+      color: #ecf0f1;
+      cursor: not-allowed;
+    }
+    
+    .links a[href="#"]:hover {
+      background-color: #7f8c8d;
+    }
+    
+    .section {
+      margin: 40px 0;
+    }
+    
+    .section h2 {
+      font-size: 1.8em;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    
+    .abstract {
+      font-size: 1.1em;
+      line-height: 1.7;
+      text-align: justify;
+      background-color: #f8f9fa;
+      padding: 25px;
+      border-left: 4px solid #3498db;
+      margin: 20px 0;
+    }
+    
+    .tldr {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    
+    .code-block {
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .title {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1 class="title">Model Inversion Robustness: Can Transfer Learning Help?</h1>
+    
+    <div class="authors">
+      <strong>Sy-Tuyen Ho</strong><sup>1</sup>, Koh Jun Hao<sup>1</sup>, Keshigeyan Chandrasegaran<sup>2</sup>, Ngoc-Bao Nguyen<sup>1</sup>, Ngai-Man Cheung<sup>1</sup>
+    </div>
+    
+    <div class="affiliations">
+      <sup>1</sup>Singapore University of Technology and Design
+      <sup>2</sup>Stanford University
+    </div>
+    
+    <div class="venue">
+      CVPR 2024
+    </div>
+    
+    <div class="links">
+      <a href="https://arxiv.org/abs/2405.05588" target="_blank">Paper</a>
+      <a href="https://github.com/hosytuyen/TL-DMI" target="_blank">Code</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="section">
+    <h2>Abstract</h2>
+    <div class="tldr">
+      <strong>TL;DR:</strong> Transfer Learning prevents data leakage in Model Inversion Attacks by reducing memorization and improving generalization in deep neural networks.
+    </div>
+
+    <div class="abstract">
+        Model Inversion (MI) attacks aim to reconstruct private training data by abusing access to machine learning models. Contemporary MI attacks have achieved impressive attack performance, posing serious threats to privacy. Meanwhile, all existing MI defense methods rely on regularization that is in direct conflict with the training objective, resulting in noticeable degradation in model utility. In this work, we take a different perspective, and propose a novel and simple Transfer Learning-based Defense against Model Inversion (TL-DMI) to render MI-robust models. Particularly, by leveraging TL, we limit the number of layers encoding sensitive information from private training dataset, thereby degrading the performance of MI attack. We conduct an analysis using Fisher Information to justify our method. Our defense is remarkably simple to implement. Without bells and whistles, we show in extensive experiments that TL-DMI achieves state-of-the-art (SOTA) MI robustness.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Method Overview</h2>
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="assets/images/Overall.png" alt="TL-DMI method overview showing transfer learning defense against model inversion" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    
+
+  </div>
+
+  <div class="section">
+    <h2>BibTeX</h2>
+    <div class="code-block">
+        @inproceedings{ho2024model,
+            title={Model inversion robustness: Can transfer learning help?},
+            author={Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man},
+            booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+            pages={12183--12193},
+            year={2024}
+          }
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 40px 0; margin-top: 40px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #666;">
+    <p><a href="/" style="color: #3498db; text-decoration: none;">← Back to Sy-Tuyen Ho's Homepage</a></p>
+  </footer>
+</body>
+</html>
