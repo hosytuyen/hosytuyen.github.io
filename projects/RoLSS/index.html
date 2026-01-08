@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RoLSS: On the Vulnerability of Skip Connections to Model Inversion Attacks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#2196f3">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RoLSS: Skip Connections Vulnerability to Model Inversion">
+  <meta property="og:url" content="https://hosytuyen.github.io/projects/RoLSS/">
+  <meta property="og:site_name" content="RoLSS">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0.css">
+  <link rel="stylesheet" href="/lib/fancybox/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+  <script src="/lib/jquery/dist/jquery.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .title {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .authors {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .authors sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-left: 2px;
+    }
+    
+    .affiliations {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .affiliations sup {
+      color: #3498db;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    .venue {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+    
+    .links {
+      margin: 20px 0;
+    }
+    
+    .links a {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      border: 2px solid #2c3e50;
+    }
+    
+    .links a:hover {
+      background-color: #34495e;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-color: #34495e;
+    }
+    
+    .links a[href="#"] {
+      background-color: #95a5a6;
+      color: #ecf0f1;
+      cursor: not-allowed;
+    }
+    
+    .links a[href="#"]:hover {
+      background-color: #7f8c8d;
+    }
+    
+    .section {
+      margin: 40px 0;
+    }
+    
+    .section h2 {
+      font-size: 1.8em;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    
+    .abstract {
+      font-size: 1.1em;
+      line-height: 1.7;
+      text-align: justify;
+      background-color: #f8f9fa;
+      padding: 25px;
+      border-left: 4px solid #3498db;
+      margin: 20px 0;
+    }
+    
+    .tldr {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    
+    .code-block {
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .title {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1 class="title">On the Vulnerability of Skip Connections to Model Inversion Attacks</h1>
+    
+    <div class="authors">
+      Koh Jun Hao*<sup>1</sup>, <strong>Sy-Tuyen Ho*</strong><sup>1</sup>, Ngoc-Bao Nguyen<sup>1</sup>, Ngai-Man Cheung<sup>1</sup><br>
+      <em>* joint first authors</em>
+    </div>
+    
+    <div class="affiliations">
+      <sup>1</sup>Singapore University of Technology and Design
+    </div>
+    
+    <div class="venue">
+      ECCV 2024
+    </div>
+    
+    <div class="links">
+      <a href="https://arxiv.org/abs/2409.01696" target="_blank">Paper</a>
+      <a href="https://github.com/Pillowkoh/RoLSS" target="_blank">Code</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Abstract</h2>
+    <div class="tldr">
+      <strong>TL;DR:</strong> We investigate how skip connections in deep neural networks affect vulnerability to model inversion attacks and propose MI-resilient architectures based on this understanding.
+    </div>
+
+    <div class="abstract">
+        Skip connections are fundamental architecture designs for modern deep neural networks (DNNs) such as CNNs and ViTs. While they help improve model performance significantly, we identify a vulnerability associated with skip connections to Model Inversion (MI) attacks, a type of privacy attack that aims to reconstruct private training data through abusive exploitation of a model. In this paper, as a pioneer work to understand how DNN architectures affect MI, we study the impact of skip connections on MI. We make the following discoveries: 1) Skip connections reinforce MI attacks and compromise data privacy. 2) Skip connections in the last stage are the most critical to attack. 3) RepVGG, an approach to remove skip connections in the inference-time architectures, could not mitigate the vulnerability to MI attacks. 4) Based on our findings, we propose MI-resilient architecture designs for the first time. Without bells and whistles, we show in extensive experiments that our MI-resilient architectures can outperform state-of-the-art (SOTA) defense methods in MI robustness. Furthermore, our MI-resilient architectures are complementary to existing MI defense methods.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Our Investigation on How Skip Connections Affect MI Vulnerability</h2>
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="assets/images/Overview.png" alt="RoLSS overview showing skip connection vulnerability analysis and mitigation strategies" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    
+    <div class="abstract">
+      <p>We systematically analyze how different skip connection patterns affect model inversion vulnerability.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Experimental Results</h2>
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="assets/images/Results.png" alt="RoLSS experimental results showing defense effectiveness across different architectures" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    
+    <div class="abstract">
+      <p>Our experimental results demonstrate the effectiveness of MI-resilient architectures across different ResNet variants. The table shows that our proposed methods (RoLSS, SSF, TTS) significantly reduce attack accuracy while maintaining competitive model performance</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>BibTeX</h2>
+    <div class="code-block">
+        @article{koh2024vulnerability,
+            title={On the vulnerability of skip connections to model inversion attacks},
+            author={Koh, Jun Hao and Ho, Sy-Tuyen and Nguyen, Ngoc-Bao and Cheung, Ngai-man},
+            journal={arXiv preprint arXiv:2409.01696},
+            year={2024}
+          }
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 40px 0; margin-top: 40px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #666;">
+    <p><a href="/" style="color: #3498db; text-decoration: none;">← Back to Sy-Tuyen Ho's Homepage</a></p>
+  </footer>
+</body>
+</html>
