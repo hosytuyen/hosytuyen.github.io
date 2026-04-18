@@ -1,497 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TL-DMI: Model Inversion Robustness — Can Transfer Learning Help?</title>
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="TL-DMI: Model Inversion Robustness">
-  <meta property="og:url" content="https://hosytuyen.github.io/projects/TL-DMI/">
-  <meta property="og:site_name" content="TL-DMI">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="TL-DMI: Model Inversion Robustness" />
+  <meta property="og:url" content="https://hosytuyen.github.io/projects/TL-DMI/" />
+  <meta property="og:site_name" content="TL-DMI" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --bg: #0b0d11;
-      --bg2: #111419;
-      --bg3: #181c24;
-      --surface: #1e2430;
-      --border: rgba(255,255,255,0.07);
-      --text: #e8eaf0;
-      --muted: #8a91a8;
-      --accent: #34d399;
-      --accent2: #60a5fa;
-      --accent3: #a78bfa;
+    :root{
+      --bg:#ffffff;
+      --panel:#f8fafc;
+      --panel-2:#f1f5f9;
+      --line:#e2e8f0;
+      --text:#0f172a;
+      --muted:#475569;
+      --soft:#64748b;
+      --accent:#2563eb;
+      --accent-soft:#dbeafe;
+      --max:980px;
+      --radius:18px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:linear-gradient(to bottom,#ffffff 0%,#fbfdff 100%);
+      line-height:1.72;
     }
 
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; opacity: 0.5;
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 24px;
     }
 
-    .wrap { max-width: 960px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
-
-    header { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
-
-    .venue-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.72rem; font-weight: 500;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(52,211,153,0.10);
-      border: 1px solid rgba(52,211,153,0.25);
-      border-radius: 4px; padding: 5px 12px; margin-bottom: 28px;
-    }
-    .venue-badge::before { content: '●'; animation: blink 2s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
-      line-height: 1.15; font-weight: 400; color: #fff;
-      max-width: 820px; margin-bottom: 36px; letter-spacing: -0.01em;
-    }
-    h1 em { font-style: italic; color: var(--accent2); }
-
-    .authors {
-      display: flex; flex-wrap: wrap; gap: 6px 0;
-      font-size: 0.95rem; color: var(--muted); margin-bottom: 8px;
-    }
-    .author { display: inline-flex; align-items: baseline; gap: 1px; margin-right: 20px; }
-    .author strong { color: var(--text); font-weight: 500; }
-    .author sup { font-size: 0.7em; color: var(--accent3); margin-left: 1px; }
-
-    .affiliations {
-      font-size: 0.82rem; color: var(--muted); margin: 10px 0 32px;
-      font-family: 'IBM Plex Mono', monospace;
-    }
-    .affiliations sup { color: var(--accent3); margin-right: 4px; font-size: 0.85em; }
-
-    .links { display: flex; flex-wrap: wrap; gap: 10px; }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.85rem; font-weight: 500; padding: 9px 20px;
-      border-radius: 6px; text-decoration: none; transition: all 0.2s ease;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .btn-primary { background: var(--accent); color: #0b0d11; border: 1px solid transparent; }
-    .btn-primary:hover { background: #28c487; transform: translateY(-1px); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-outline:hover { border-color: rgba(255,255,255,0.2); background: var(--surface); transform: translateY(-1px); }
-    .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
-    section:last-of-type { border-bottom: none; }
-
-    .section-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.68rem; font-weight: 500;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--accent3); margin-bottom: 24px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .section-label::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(to right, var(--border), transparent);
+    header{
+      padding:56px 0 28px;
+      border-bottom:1px solid var(--line);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.08), transparent 36%),
+        radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 28%);
     }
 
-    h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.9rem; font-weight: 400; color: #fff; margin-bottom: 22px;
+    .venue{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:.86rem;
+      font-weight:600;
+      color:var(--accent);
+      background:var(--accent-soft);
+      border:1px solid #bfdbfe;
+      border-radius:999px;
+      padding:6px 12px;
+      margin-bottom:18px;
     }
 
-    p { color: var(--muted); font-size: 0.97rem; max-width: 760px; }
-    p + p { margin-top: 14px; }
-
-    /* ── FIGURE ── */
-    .figure-wrap {
-      margin: 28px 0 8px; border-radius: 12px; overflow: hidden;
-      border: 1px solid var(--border); background: var(--bg3);
-    }
-    .figure-wrap img { width: 100%; display: block; }
-    .figure-caption {
-      padding: 16px 20px; font-size: 0.82rem; color: var(--muted);
-      background: var(--bg2); border-top: 1px solid var(--border); font-style: italic;
-    }
-    .figure-caption strong { color: var(--text); font-style: normal; }
-
-    /* ── STATS ── */
-    .stats { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
-    .stat {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 18px 24px; flex: 1; min-width: 130px;
-    }
-    .stat-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2rem; font-weight: 400; color: var(--accent); line-height: 1;
-    }
-    .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
-
-    /* ── ABSTRACT ── */
-    .abstract-box {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0; padding: 28px 32px; margin-top: 8px;
-    }
-    .abstract-box p { max-width: 100%; font-size: 0.96rem; line-height: 1.8; }
-
-    .tldr {
-      display: flex; gap: 12px; align-items: flex-start;
-      background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.18);
-      border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;
-    }
-    .tldr-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
-      color: var(--accent); white-space: nowrap; padding-top: 2px;
-    }
-    .tldr p { color: var(--text); max-width: 100%; font-size: 0.9rem; }
-
-    /* ── FINDINGS GRID ── */
-    .findings { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
-    @media(max-width:640px){ .findings{ grid-template-columns: 1fr; } }
-
-    .finding-card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px;
-      position: relative; overflow: hidden; transition: border-color 0.2s;
-    }
-    .finding-card:hover { border-color: rgba(255,255,255,0.14); }
-    .finding-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--card-accent, var(--accent));
-    }
-    .finding-card:nth-child(2) { --card-accent: var(--accent2); }
-    .finding-card:nth-child(3) { --card-accent: var(--accent3); }
-    .finding-card:nth-child(4) { --card-accent: #f5a462; }
-
-    .finding-num {
-      font-family: 'DM Serif Display', serif; font-size: 2.5rem;
-      color: var(--card-accent, var(--accent)); opacity: 0.2; line-height: 1; margin-bottom: 8px;
-    }
-    .finding-card h3 { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-    .finding-card p { font-size: 0.83rem; max-width: 100%; }
-
-    /* ── METHOD STEPS ── */
-    .method-steps { display: flex; flex-direction: column; margin-top: 28px; position: relative; }
-    .method-steps::before {
-      content: ''; position: absolute; left: 19px; top: 24px; bottom: 24px;
-      width: 1px; background: var(--border);
-    }
-    .step { display: flex; gap: 20px; padding: 16px 0; }
-    .step-dot {
-      width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%;
-      background: var(--bg3); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem; color: var(--accent3); font-weight: 500;
-      position: relative; z-index: 1;
-    }
-    .step-content h3 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .step-content p { font-size: 0.83rem; max-width: 100%; }
-
-    /* ── RESULT TABLE ── */
-    .result-table {
-      width: 100%; border-collapse: collapse; margin-top: 20px;
-      font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;
-    }
-    .result-table th {
-      text-align: left; padding: 10px 14px; color: var(--accent3); font-weight: 500;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
-    }
-    .result-table td { padding: 9px 14px; color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .result-table tr:hover td { background: var(--bg2); }
-    .result-table .best { color: var(--accent); font-weight: 500; }
-    .result-table .ours { color: var(--accent); font-weight: 500; }
-    .result-table .section-row td {
-      background: var(--bg3); color: var(--accent3);
-      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 6px 14px;
+    .venue::before{
+      content:"";
+      width:8px;height:8px;border-radius:999px;background:var(--accent);
     }
 
-    /* ── BIBTEX ── */
-    .bibtex {
-      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-      padding: 24px 28px; font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.78rem; color: #a8b4cc; line-height: 1.8;
-      overflow-x: auto; margin-top: 16px; position: relative;
+    h1{
+      margin:0 0 18px;
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:clamp(2rem,4.6vw,3.3rem);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      max-width:920px;
     }
-    .bibtex .key { color: var(--accent2); }
-    .bibtex .val { color: #88c0a8; }
-    .copy-btn {
-      position: absolute; top: 14px; right: 14px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--muted); font-size: 0.72rem; padding: 4px 10px;
-      border-radius: 4px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s;
-    }
-    .copy-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 
-    footer {
-      padding: 40px 0; text-align: center;
-      font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--border);
+    h1 em{
+      font-style:italic;
+      color:var(--accent);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--text); }
 
-    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: none; } }
-    .fade-in:nth-child(1) { animation-delay: 0.05s; }
-    .fade-in:nth-child(2) { animation-delay: 0.12s; }
-    .fade-in:nth-child(3) { animation-delay: 0.19s; }
-    .fade-in:nth-child(4) { animation-delay: 0.26s; }
-    .fade-in:nth-child(5) { animation-delay: 0.33s; }
+    .authors{
+      color:var(--muted);
+      font-size:1rem;
+      margin:0 0 12px;
+      line-height:1.8;
+    }
+
+    .author{
+      display:inline;
+      margin-right:10px;
+      white-space:nowrap;
+    }
+
+    .author strong{
+      color:var(--text);
+      font-weight:600;
+    }
+
+    .author sup{
+      font-size:.72em;
+      color:var(--accent);
+      margin-left:1px;
+    }
+
+    .affiliations{
+      color:var(--muted);
+      font-size:.94rem;
+      margin:0 0 18px;
+    }
+
+    .affiliations sup{
+      color:var(--accent);
+      font-size:.8em;
+      margin-right:2px;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:10px 16px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:600;
+      font-size:.95rem;
+      box-shadow:0 1px 2px rgba(15,23,42,.03);
+      transition:transform .15s ease;
+    }
+
+    .btn.primary{
+      color:#fff;
+      background:var(--accent);
+      border-color:var(--accent);
+    }
+
+    .btn:hover{
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+    .btn svg{
+      width:16px;
+      height:16px;
+      flex-shrink:0;
+    }
+
+    main{padding:28px 0 64px}
+    section{padding:26px 0}
+
+    h2{
+      margin:0 0 14px;
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:2rem;
+      line-height:1.2;
+      font-weight:700;
+    }
+
+    .lead{
+      color:var(--muted);
+      font-size:1rem;
+      margin:0;
+      max-width:840px;
+    }
+
+    .hero-card,
+    .card,
+    .figure,
+    .bibtex{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+    }
+
+    .hero-card{
+      padding:20px;
+      margin-top:24px;
+    }
+
+    .hero-card img{
+      width:100%;
+      display:block;
+      border-radius:14px;
+      background:var(--panel);
+    }
+
+    .figure{
+      overflow:hidden;
+      margin-top:18px;
+    }
+
+    .figure img{
+      width:100%;
+      display:block;
+      background:var(--panel);
+    }
+
+    .caption{
+      font-size:.95rem;
+      color:var(--muted);
+      margin-top:12px;
+    }
+
+    .figure .caption{
+      margin:0;
+      padding:14px 18px 18px;
+      border-top:1px solid var(--line);
+      background:#fff;
+    }
+
+    .caption strong{color:var(--text)}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .stat{
+      padding:18px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+    .stat .num{
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:2rem;
+      line-height:1;
+      font-weight:700;
+      color:var(--accent);
+      margin-bottom:8px;
+    }
+
+    .stat .label{
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.45;
+    }
+
+    .abstract{
+      padding:24px;
+      background:linear-gradient(to bottom right,#ffffff,#f8fbff);
+    }
+
+    .tldr{
+      margin-bottom:18px;
+      padding:14px 16px;
+      background:var(--accent-soft);
+      border:1px solid #bfdbfe;
+      border-radius:14px;
+      color:#1e3a8a;
+      font-size:.96rem;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .card{
+      padding:22px;
+    }
+
+    .card .idx{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-size:1.04rem;
+      line-height:1.35;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .method-steps{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .step{
+      padding:18px 20px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--panel);
+    }
+
+    .step .step-num{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--accent);
+      font-weight:700;
+      font-size:.84rem;
+      margin-bottom:10px;
+    }
+
+    .step h3{
+      margin:0 0 6px;
+      font-size:1rem;
+      color:var(--text);
+    }
+
+    .step p{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin-top:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+    }
+
+    thead th{
+      text-align:left;
+      background:var(--panel);
+      color:var(--text);
+      font-size:.9rem;
+      font-weight:700;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    tbody td{
+      padding:13px 16px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:.94rem;
+      vertical-align:top;
+    }
+
+    tbody tr:last-child td{border-bottom:none}
+
+    .best{
+      color:#15803d;
+      font-weight:700;
+    }
+
+    .ours{
+      color:var(--accent);
+      font-weight:700;
+    }
+
+    .bibtex{
+      position:relative;
+      padding:22px;
+      margin-top:12px;
+      overflow:auto;
+      background:#fcfdff;
+    }
+
+    pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-size:.94rem;
+      line-height:1.65;
+      color:var(--muted);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+    }
+
+    .copy-btn{
+      position:absolute;
+      top:14px;
+      right:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    footer{
+      padding:30px 0 56px;
+      color:var(--soft);
+      text-align:center;
+      font-size:.93rem;
+      border-top:1px solid var(--line);
+    }
+
+    footer .small{
+      display:block;
+      margin-top:8px;
+      font-size:.88rem;
+    }
+
+    @media (max-width:860px){
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .cards{grid-template-columns:1fr}
+    }
+
+    @media (max-width:560px){
+      .stats{grid-template-columns:1fr}
+      .container{padding:0 16px}
+      header{padding-top:42px}
+      .btn{width:100%;justify-content:center}
+      .hero-card,.card,.abstract,.bibtex{border-radius:16px}
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="container">
+      <div class="venue">CVPR 2024</div>
 
-<!-- ══ HEADER ══ -->
-<header>
-  <div class="wrap">
-    <div class="fade-in">
-      <div class="venue-badge">CVPR 2024</div>
-    </div>
-    <h1 class="fade-in">
-      Model Inversion Robustness:<br>
-      <em>Can Transfer Learning Help?</em>
-    </h1>
+      <h1>
+        Model Inversion Robustness:<br>
+        <em>Can Transfer Learning Help?</em>
+      </h1>
 
-    <div class="authors fade-in">
-      <span class="author"><strong>Sy-Tuyen Ho</strong><sup>1</sup></span>
-      <span class="author"><strong>Koh Jun Hao</strong><sup>1</sup></span>
-      <span class="author"><strong>Keshigeyan Chandrasegaran</strong><sup>2</sup></span>
-      <span class="author"><strong>Ngoc-Bao Nguyen</strong><sup>1</sup></span>
-      <span class="author"><strong>Ngai-Man Cheung</strong><sup>1</sup></span>
-    </div>
+      <p class="authors">
+        <span class="author"><strong>Sy-Tuyen Ho</strong><sup>1</sup></span>
+        <span class="author"><strong>Koh Jun Hao</strong><sup>1</sup></span>
+        <span class="author"><strong>Keshigeyan Chandrasegaran</strong><sup>2</sup></span>
+        <span class="author"><strong>Ngoc-Bao Nguyen</strong><sup>1</sup></span>
+        <span class="author"><strong>Ngai-Man Cheung</strong><sup>1</sup></span>
+      </p>
 
-    <div class="affiliations fade-in">
-      <sup>1</sup>Singapore University of Technology and Design &nbsp;&nbsp;
-      <sup>2</sup>Stanford University
-    </div>
+      <p class="affiliations">
+        <sup>1</sup>Singapore University of Technology and Design &nbsp;&nbsp;
+        <sup>2</sup>Stanford University
+      </p>
 
-    <div class="links fade-in">
-      <a class="btn btn-primary" href="https://arxiv.org/abs/2405.05588" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Paper (arXiv)
-      </a>
-      <a class="btn btn-outline" href="https://github.com/hosytuyen/TL-DMI" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        Code
-      </a>
-    </div>
-  </div>
-</header>
+      <div class="actions">
+        <a class="btn primary" href="https://arxiv.org/abs/2405.05588" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Paper (arXiv)
+        </a>
 
-<!-- ══ OVERVIEW IMAGE ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Method Overview</div>
-
-    <div class="figure-wrap">
-      <img src="assets/images/Overall.png" alt="TL-DMI overview: transfer learning defense limits layers encoding private data, degrading MI attack performance" />
-      <div class="figure-caption">
-        <strong>Figure 1.</strong> TL-DMI leverages transfer learning to limit the number of layers that encode sensitive information from the private training dataset. By freezing pre-trained layers and fine-tuning only a small portion on private data, TL-DMI reduces the information exploitable by MI attacks — as justified by Fisher Information analysis — while preserving strong model utility.
+        <a class="btn" href="https://github.com/hosytuyen/TL-DMI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+          Code
+        </a>
       </div>
     </div>
+  </header>
 
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-num">SOTA</div>
-        <div class="stat-label">MI robustness on CelebA & FaceScrub</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">Conflict with training objective</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">Simple</div>
-        <div class="stat-label">No bells and whistles — plug-and-play TL</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">Fisher</div>
-        <div class="stat-label">Information-theoretic justification</div>
-      </div>
-    </div>
-  </div>
-</section>
+  <main>
+    <section>
+      <div class="container">
+        <div class="hero-card">
+          <img src="assets/images/Overall.png" alt="TL-DMI overview: transfer learning defense limits layers encoding private data, degrading MI attack performance" />
+          <p class="caption">
+            <strong>Figure 1.</strong> TL-DMI leverages transfer learning to limit the number of layers encoding sensitive information from the private training dataset. By freezing pre-trained layers and fine-tuning only a small portion on private data, TL-DMI reduces the information exploitable by MI attacks — as justified by Fisher Information analysis — while preserving strong model utility.
+          </p>
+        </div>
 
-<!-- ══ ABSTRACT ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Abstract</div>
-
-    <div class="tldr">
-      <span class="tldr-label">TL;DR</span>
-      <p>Transfer Learning limits the number of layers encoding sensitive private data, degrading MI attack performance without conflicting with the training objective. TL-DMI achieves SOTA MI robustness with a remarkably simple implementation.</p>
-    </div>
-
-    <div class="abstract-box">
-      <p>Model Inversion (MI) attacks aim to reconstruct private training data by abusing access to machine learning models. Contemporary MI attacks have achieved impressive attack performance, posing serious threats to privacy. Meanwhile, all existing MI defense methods rely on regularization that is in direct conflict with the training objective, resulting in noticeable degradation in model utility.</p>
-      <p style="margin-top:14px;">In this work, we take a different perspective, and propose a novel and simple <strong style="color:#e8eaf0;">Transfer Learning-based Defense against Model Inversion (TL-DMI)</strong> to render MI-robust models. By leveraging transfer learning, we limit the number of layers encoding sensitive information from private training data, thereby degrading the performance of MI attacks. We conduct an analysis using <strong style="color:#34d399;">Fisher Information</strong> to justify our method. Our defense is remarkably simple to implement — without bells and whistles, TL-DMI achieves state-of-the-art MI robustness across extensive experiments.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ KEY CONTRIBUTIONS ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Key Contributions</div>
-    <h2>A New Perspective on MI Defense</h2>
-    <div class="findings">
-      <div class="finding-card">
-        <div class="finding-num">01</div>
-        <h3>Novel Defense Perspective: Training Paradigm</h3>
-        <p>All prior MI defenses add regularization terms that directly oppose the classification objective, trading accuracy for privacy. TL-DMI instead modifies the training paradigm — using transfer learning to reduce the amount of private information encoded — with no conflict with the task objective.</p>
-      </div>
-      <div class="finding-card">
-        <div class="finding-num">02</div>
-        <h3>Fisher Information Justification</h3>
-        <p>We use Fisher Information to analyze how many layers encode private dataset-specific information. Transfer learning naturally limits this by reusing generic pre-trained features, reducing the exploitable information surface that MI adversaries rely on during gradient-based inversion.</p>
-      </div>
-      <div class="finding-card">
-        <div class="finding-num">03</div>
-        <h3>Remarkably Simple Implementation</h3>
-        <p>TL-DMI requires no additional loss terms, no hyperparameter grid search, and no architecture modifications. Simply initialize with a pre-trained model and fine-tune only a limited number of layers on the private dataset — a standard transfer learning workflow already familiar to practitioners.</p>
-      </div>
-      <div class="finding-card">
-        <div class="finding-num">04</div>
-        <h3>SOTA MI Robustness, Preserved Utility</h3>
-        <p>TL-DMI achieves state-of-the-art MI robustness across SOTA attacks (PPA, LOMMA, KEDMI, PLG-MI) and datasets (CelebA, FaceScrub), while maintaining competitive or superior model utility compared to existing regularization-based defenses (MID, BiDO).</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ METHOD ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Method</div>
-    <h2>TL-DMI: Transfer Learning as Privacy Defense</h2>
-    <p>The core insight is that MI attacks exploit the private-dataset-specific information encoded throughout the model's layers. By leveraging transfer learning, we control how much of the network is adapted to the private dataset — leaving the majority of layers encoding generic, non-sensitive representations that MI adversaries cannot exploit.</p>
-
-    <div class="method-steps">
-      <div class="step">
-        <div class="step-dot">01</div>
-        <div class="step-content">
-          <h3>Pre-trained Feature Extraction</h3>
-          <p>Start from a model pre-trained on a large public dataset (e.g., ImageNet). The early and middle layers already encode rich, generic visual features that are independent of the private training data. These layers are frozen and not updated during fine-tuning.</p>
+        <div class="stats">
+          <div class="stat">
+            <div class="num">SOTA</div>
+            <div class="label">MI robustness on CelebA &amp; FaceScrub</div>
+          </div>
+          <div class="stat">
+            <div class="num">0</div>
+            <div class="label">Conflict with training objective</div>
+          </div>
+          <div class="stat">
+            <div class="num">Simple</div>
+            <div class="label">No bells and whistles — plug-and-play TL</div>
+          </div>
+          <div class="stat">
+            <div class="num">Fisher</div>
+            <div class="label">Information-theoretic justification</div>
+          </div>
         </div>
       </div>
-      <div class="step">
-        <div class="step-dot">02</div>
-        <div class="step-content">
-          <h3>Controlled Fine-tuning on Private Data</h3>
-          <p>Only the final few layers are fine-tuned on the private dataset D<sub>priv</sub>. This strictly limits the number of layers that encode private-dataset-specific information, reducing the exploitable MI surface without requiring any modifications to the training loss.</p>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Abstract</h2>
+        <div class="abstract card">
+          <div class="tldr">
+            <strong>TL;DR.</strong> Transfer Learning limits the number of layers encoding sensitive private data, degrading MI attack performance without conflicting with the training objective. TL-DMI achieves SOTA MI robustness with a remarkably simple implementation.
+          </div>
+
+          <p class="lead">
+            Model Inversion (MI) attacks aim to reconstruct private training data by abusing access to machine learning models. Contemporary MI attacks have achieved impressive attack performance, posing serious threats to privacy. Meanwhile, all existing MI defense methods rely on regularization that is in direct conflict with the training objective, resulting in noticeable degradation in model utility.
+          </p>
+
+          <p class="lead" style="margin-top:14px;">
+            In this work, we take a different perspective, and propose a novel and simple <strong style="color:var(--text);">Transfer Learning-based Defense against Model Inversion (TL-DMI)</strong> to render MI-robust models. By leveraging transfer learning, we limit the number of layers encoding sensitive information from private training data, thereby degrading the performance of MI attacks. We conduct an analysis using <strong style="color:var(--accent);">Fisher Information</strong> to justify our method. Our defense is remarkably simple to implement — without bells and whistles, TL-DMI achieves state-of-the-art MI robustness across extensive experiments.
+          </p>
         </div>
       </div>
-      <div class="step">
-        <div class="step-dot">03</div>
-        <div class="step-content">
-          <h3>Fisher Information Analysis</h3>
-          <p>We use Fisher Information to measure how much private-data-specific information is stored in each layer. TL-DMI naturally reduces this per-layer Fisher Information by limiting gradient updates to only the final layers, providing a principled theoretical justification for the defense mechanism.</p>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>A New Perspective on MI Defense</h2>
+        <div class="cards">
+          <div class="card">
+            <div class="idx">01</div>
+            <h3>Novel Defense Perspective: Training Paradigm</h3>
+            <p>All prior MI defenses add regularization terms that directly oppose the classification objective, trading accuracy for privacy. TL-DMI instead modifies the training paradigm — using transfer learning to reduce the amount of private information encoded — with no conflict with the task objective.</p>
+          </div>
+
+          <div class="card">
+            <div class="idx">02</div>
+            <h3>Fisher Information Justification</h3>
+            <p>We use Fisher Information to analyze how many layers encode private dataset-specific information. Transfer learning naturally limits this by reusing generic pre-trained features, reducing the exploitable information surface that MI adversaries rely on during gradient-based inversion.</p>
+          </div>
+
+          <div class="card">
+            <div class="idx">03</div>
+            <h3>Remarkably Simple Implementation</h3>
+            <p>TL-DMI requires no additional loss terms, no hyperparameter grid search, and no architecture modifications. Simply initialize with a pre-trained model and fine-tune only a limited number of layers on the private dataset — a standard transfer learning workflow already familiar to practitioners.</p>
+          </div>
+
+          <div class="card">
+            <div class="idx">04</div>
+            <h3>SOTA MI Robustness, Preserved Utility</h3>
+            <p>TL-DMI achieves state-of-the-art MI robustness across SOTA attacks (PPA, LOMMA, KEDMI, PLG-MI) and datasets (CelebA, FaceScrub), while maintaining competitive or superior model utility compared to existing regularization-based defenses (MID, BiDO).</p>
+          </div>
         </div>
       </div>
-      <div class="step">
-        <div class="step-dot">04</div>
-        <div class="step-content">
-          <h3>Complementary to Existing Defenses</h3>
-          <p>Because TL-DMI operates at the training paradigm level rather than through regularization, it is orthogonal to and complementary with existing MI defenses such as MID and BiDO — enabling further improvements when combined.</p>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>TL-DMI: Transfer Learning as Privacy Defense</h2>
+        <p class="lead">The core insight is that MI attacks exploit the private-dataset-specific information encoded throughout the model's layers. By leveraging transfer learning, we control how much of the network is adapted to the private dataset — leaving the majority of layers encoding generic, non-sensitive representations that MI adversaries cannot exploit.</p>
+
+        <div class="method-steps">
+          <div class="step">
+            <div class="step-num">01</div>
+            <h3>Pre-trained Feature Extraction</h3>
+            <p>Start from a model pre-trained on a large public dataset (e.g., ImageNet). The early and middle layers already encode rich, generic visual features that are independent of the private training data. These layers are frozen and not updated during fine-tuning.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-num">02</div>
+            <h3>Controlled Fine-tuning on Private Data</h3>
+            <p>Only the final few layers are fine-tuned on the private dataset D<sub>priv</sub>. This strictly limits the number of layers that encode private-dataset-specific information, reducing the exploitable MI surface without requiring any modifications to the training loss.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-num">03</div>
+            <h3>Fisher Information Analysis</h3>
+            <p>We use Fisher Information to measure how much private-data-specific information is stored in each layer. TL-DMI naturally reduces this per-layer Fisher Information by limiting gradient updates to only the final layers, providing a principled theoretical justification for the defense mechanism.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-num">04</div>
+            <h3>Complementary to Existing Defenses</h3>
+            <p>Because TL-DMI operates at the training paradigm level rather than through regularization, it is orthogonal to and complementary with existing MI defenses such as MID and BiDO — enabling further improvements when combined.</p>
+          </div>
         </div>
       </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>TL-DMI vs. Existing MI Defenses</h2>
+        <p class="lead">Unlike all existing MI defenses, TL-DMI introduces no conflict with the training objective and requires no regularization hyperparameter search — while achieving SOTA privacy-utility trade-off.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Defense</th>
+              <th>Defense Type</th>
+              <th>Conflicts w/ Training?</th>
+              <th>Hyperparam Search?</th>
+              <th>MI Robustness</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>No Defense</td><td>—</td><td>—</td><td>—</td><td>Low</td></tr>
+            <tr><td>MID</td><td>Mutual Info Reg.</td><td>Yes</td><td>Yes</td><td>Medium</td></tr>
+            <tr><td>BiDO</td><td>Bilateral Reg.</td><td>Yes</td><td>Yes (extensive)</td><td>Medium–High</td></tr>
+            <tr><td>LS</td><td>Label Smoothing</td><td>Partial</td><td>Yes</td><td>Medium</td></tr>
+            <tr><td class="ours">TL-DMI (Ours)</td><td class="ours">Training Paradigm</td><td class="best">No</td><td class="best">No</td><td class="best">SOTA</td></tr>
+          </tbody>
+        </table>
+
+        <p class="lead" style="margin-top:12px;font-size:.9rem;">
+          TL-DMI is the first MI defense to operate at the training paradigm level — achieving SOTA robustness with zero conflict with the task objective.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Citation</h2>
+        <div class="bibtex">
+          <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+<pre>@inproceedings{ho2024model,
+  title     = {Model Inversion Robustness: Can Transfer Learning Help?},
+  author    = {Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {12183--12193},
+  year      = {2024}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Singapore University of Technology and Design · Stanford University
+      <span class="small">
+        <a href="mailto:sytuyen_ho@mymail.sutd.edu.sg">sytuyen_ho@mymail.sutd.edu.sg</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:ngaiman_cheung@sutd.edu.sg">ngaiman_cheung@sutd.edu.sg</a>
+      </span>
+      <span class="small">
+        <a href="/">← Back to Sy-Tuyen Ho's Homepage</a>
+      </span>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ══ COMPARISON TABLE ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Comparison</div>
-    <h2>TL-DMI vs. Existing MI Defenses</h2>
-    <p>Unlike all existing MI defenses, TL-DMI introduces no conflict with the training objective and requires no regularization hyperparameter search — while achieving SOTA privacy-utility trade-off.</p>
-
-    <table class="result-table" style="margin-top:24px;">
-      <thead>
-        <tr>
-          <th>Defense</th>
-          <th>Defense Type</th>
-          <th>Conflicts w/ Training?</th>
-          <th>Hyperparam Search?</th>
-          <th>MI Robustness</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>No Defense</td><td>—</td><td>—</td><td>—</td><td>Low</td></tr>
-        <tr><td>MID</td><td>Mutual Info Reg.</td><td>Yes</td><td>Yes</td><td>Medium</td></tr>
-        <tr><td>BiDO</td><td>Bilateral Reg.</td><td>Yes</td><td>Yes (extensive)</td><td>Medium–High</td></tr>
-        <tr><td>LS</td><td>Label Smoothing</td><td>Partial</td><td>Yes</td><td>Medium</td></tr>
-        <tr><td class="ours">TL-DMI (Ours)</td><td class="ours">Training Paradigm</td><td class="best">No</td><td class="best">No</td><td class="best">SOTA</td></tr>
-      </tbody>
-    </table>
-    <p style="margin-top:12px;font-size:0.78rem;font-family:'IBM Plex Mono',monospace;">TL-DMI is the first MI defense to operate at the training paradigm level — achieving SOTA robustness with zero conflict with the task objective.</p>
-  </div>
-</section>
-
-<!-- ══ BIBTEX ══ -->
-<section>
-  <div class="wrap">
-    <div class="section-label">Citation</div>
-    <h2>BibTeX</h2>
-    <div class="bibtex">
-      <button class="copy-btn" onclick="copyBibtex()">Copy</button>
-<span class="key">@inproceedings</span>{ho2024model,<br>
-&nbsp;&nbsp;<span class="key">title</span>     = {<span class="val">Model Inversion Robustness: Can Transfer Learning Help?</span>},<br>
-&nbsp;&nbsp;<span class="key">author</span>    = {<span class="val">Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man</span>},<br>
-&nbsp;&nbsp;<span class="key">booktitle</span> = {<span class="val">Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition</span>},<br>
-&nbsp;&nbsp;<span class="key">pages</span>     = {<span class="val">12183--12193</span>},<br>
-&nbsp;&nbsp;<span class="key">year</span>      = {<span class="val">2024</span>}<br>
-}
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <p style="max-width:100%;text-align:center;">
-      Singapore University of Technology and Design &nbsp;·&nbsp; Stanford University<br>
-      <a href="mailto:sytuyen_ho@mymail.sutd.edu.sg" style="margin-top:6px;display:inline-block;">sytuyen_ho@mymail.sutd.edu.sg</a>
-      &nbsp;·&nbsp;
-      <a href="mailto:ngaiman_cheung@sutd.edu.sg">ngaiman_cheung@sutd.edu.sg</a>
-      <br><br>
-      <a href="/">← Back to Sy-Tuyen Ho's Homepage</a>
-    </p>
-  </div>
-</footer>
-
-<script>
-function copyBibtex() {
-  const raw = `@inproceedings{ho2024model,
+  <script>
+    function copyBibtex() {
+      const raw = `@inproceedings{ho2024model,
   title     = {Model Inversion Robustness: Can Transfer Learning Help?},
   author    = {Ho, Sy-Tuyen and Hao, Koh Jun and Chandrasegaran, Keshigeyan and Nguyen, Ngoc-Bao and Cheung, Ngai-Man},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   pages     = {12183--12193},
   year      = {2024}
 }`;
-  navigator.clipboard.writeText(raw).then(() => {
-    const btn = document.querySelector('.copy-btn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy', 2000);
-  });
-}
-</script>
+      navigator.clipboard.writeText(raw).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = old, 2000);
+      });
+    }
+  </script>
 </body>
 </html>

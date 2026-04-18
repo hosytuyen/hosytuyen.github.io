@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoundnessBench: Can Your AI Scientist Really Tell Good Research from Bad?</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SoundnessBench" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#f8fafc;
+      --panel-2:#f1f5f9;
+      --line:#e2e8f0;
+      --text:#0f172a;
+      --muted:#475569;
+      --soft:#64748b;
+      --accent:#2563eb;
+      --accent-soft:#dbeafe;
+      --max:980px;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:linear-gradient(to bottom,#ffffff 0%,#fbfdff 100%);
+      line-height:1.72;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
+    header{
+      padding:56px 0 28px;
+      border-bottom:1px solid var(--line);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.08), transparent 36%),
+        radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 28%);
+    }
+    .venue{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:.86rem;
+      font-weight:600;
+      color:var(--accent);
+      background:var(--accent-soft);
+      border:1px solid #bfdbfe;
+      border-radius:999px;
+      padding:6px 12px;
+      margin-bottom:18px;
+    }
+    .venue::before{
+      content:"";
+      width:8px;height:8px;border-radius:999px;background:var(--accent);
+    }
+    h1{
+      margin:0 0 18px;
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:clamp(2rem,4.6vw,3.3rem);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      max-width:900px;
+    }
+    .authors{
+      color:var(--muted);
+      font-size:1rem;
+      margin:0 0 18px;
+    }
+    .actions{
+      display:flex;flex-wrap:wrap;gap:12px;
+      margin-top:20px;
+    }
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      border-radius:999px;
+      padding:10px 16px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:600;
+      font-size:.95rem;
+      box-shadow:0 1px 2px rgba(15,23,42,.03);
+    }
+    .btn.primary{
+      color:#fff;
+      background:var(--accent);
+      border-color:var(--accent);
+    }
+    .btn:hover{text-decoration:none;transform:translateY(-1px)}
+    .hero-card,.card,.figure,.bibtex{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+    }
+    main{padding:28px 0 64px}
+    section{padding:26px 0}
+    h2{
+      margin:0 0 14px;
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:2rem;
+      line-height:1.2;
+      font-weight:700;
+    }
+    .hero-card{
+      padding:20px;
+      margin-top:24px;
+    }
+    .hero-card img{
+      width:100%;
+      display:block;
+      border-radius:14px;
+      background:var(--panel);
+    }
+    .caption{
+      font-size:.95rem;
+      color:var(--muted);
+      margin-top:12px;
+    }
+    .caption strong{color:var(--text)}
+    .lead{
+      color:var(--muted);
+      font-size:1rem;
+      margin:0;
+      max-width:840px;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-top:18px;
+    }
+    .stat{
+      padding:18px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+    .stat .num{
+      font-family:"Source Serif 4", Georgia, serif;
+      font-size:2rem;
+      line-height:1;
+      font-weight:700;
+      color:var(--accent);
+      margin-bottom:8px;
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.45;
+    }
+    .abstract{
+      padding:24px;
+      background:linear-gradient(to bottom right,#ffffff,#f8fbff);
+    }
+    .tldr{
+      margin-bottom:18px;
+      padding:14px 16px;
+      background:var(--accent-soft);
+      border:1px solid #bfdbfe;
+      border-radius:14px;
+      color:#1e3a8a;
+      font-size:.96rem;
+    }
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+    .card{
+      padding:22px;
+    }
+    .card .idx{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:34px;height:34px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:1.04rem;
+      line-height:1.35;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .figure{
+      overflow:hidden;
+      margin-top:18px;
+    }
+    .figure img{
+      width:100%;
+      display:block;
+      background:var(--panel);
+    }
+    .figure .caption{
+      margin:0;
+      padding:14px 18px 18px;
+      border-top:1px solid var(--line);
+      background:#fff;
+    }
+    .takeaways{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+    .takeaway{
+      padding:18px 20px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--panel);
+    }
+    .takeaway .tag{
+      display:inline-block;
+      margin-bottom:8px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--accent);
+      font-size:.8rem;
+      font-weight:700;
+    }
+    .takeaway p{margin:0;color:var(--muted)}
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin-top:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
+    }
+    thead th{
+      text-align:left;
+      background:var(--panel);
+      color:var(--text);
+      font-size:.9rem;
+      font-weight:700;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+    }
+    tbody td{
+      padding:13px 16px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font-size:.94rem;
+      vertical-align:top;
+    }
+    tbody tr:last-child td{border-bottom:none}
+    .best{color:#15803d;font-weight:700}
+    .bad{color:#b91c1c;font-weight:700}
+    .ours{color:var(--accent);font-weight:700}
+    .bibtex{
+      position:relative;
+      padding:22px;
+      margin-top:12px;
+      overflow:auto;
+      background:#fcfdff;
+    }
+    pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-size:.94rem;
+      line-height:1.65;
+      color:var(--muted);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+    }
+    .copy-btn{
+      position:absolute;top:14px;right:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+    }
+    footer{
+      padding:30px 0 56px;
+      color:var(--soft);
+      text-align:center;
+      font-size:.93rem;
+    }
+    footer .small{
+      display:block;
+      margin-top:8px;
+      font-size:.88rem;
+    }
+    @media (max-width:860px){
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .cards{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .stats{grid-template-columns:1fr}
+      .container{padding:0 16px}
+      header{padding-top:42px}
+      .hero-card,.card,.abstract,.bibtex{border-radius:16px}
+      .btn{width:100%;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="venue">Under Review</div>
+      <h1>SoundnessBench: Can Your AI Scientist Really Tell Good Research from Bad?</h1>
+      <p class="authors">Sy-Tuyen Ho, Minghui Liu, Huy Nghiem, Furong Huang</p>
+
+      <div class="actions">
+        <a class="btn primary" href="#" target="_blank" rel="noopener">Paper</a>
+        <a class="btn" href="https://huggingface.co/datasets/hosytuyen/SoundnessBench" target="_blank" rel="noopener">Dataset &amp; Code</a>
+        <a class="btn" href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="stats">
+          <div class="stat">
+            <div class="num">1,099</div>
+            <div class="label">Real/Validated research proposals from ICLR 2022–2026</div>
+          </div>
+          <div class="stat">
+            <div class="num">12</div>
+            <div class="label">Frontier LLMs evaluated across open &amp; closed-source</div>
+          </div>
+          <div class="stat">
+            <div class="num">74%</div>
+            <div class="label">Mean false-positive rate on low-soundness proposals</div>
+          </div>
+          <div class="stat">
+            <div class="num">16</div>
+            <div class="label">ML subfields covered — RL, NLP, CV, generative models &amp; more</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Abstract</h2>
+        <div class="abstract card">
+          <div class="tldr"><strong>TL;DR.</strong> Frontier LLMs are systematically over-optimistic when judging research soundness. They approve weak proposals 74% of the time. Aggressive prompting does not improve discrimination; it largely shifts errors from false positives to false negatives. Our results point to a deeper capability limitation in judging scientific soundness, indicating that current LLMs are not yet reliable as standalone gatekeepers for scientific rigor.</div>
+          <p class="lead">Autonomous AI research agents aim to accelerate scientific discovery by automating the research pipeline, from hypothesis generation to peer review. However, existing benchmarks fail to address a fundamental bottleneck: the ability of Large Language Models to judge the viability of a research idea before expending time and computational resources. While LLMs excel at generative tasks like coding and writing, critical soundness judgment is a distinct cognitive challenge.</p>
+          <p class="lead" style="margin-top:14px;">Without a reliable "first-gate" filter, autonomous agents risk scaling flawed methodology rather than accelerating meaningful science. In this work, we introduce SoundnessBench, a curated benchmark of 1,099 real research proposals, grounded in and verified against published source papers. Our evaluation of 12 frontier LLMs reveals a pervasive optimism bias: models consistently rate proposals as sound regardless of their underlying quality. We find that aggressive prompting does not improve discrimination; it largely shifts errors from false positives to false negatives. Our results point to a deeper capability limitation in judging scientific soundness, indicating that current LLMs are not yet reliable as standalone gatekeepers for scientific rigor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Contributions</h2>
+        <div class="cards">
+          <div class="card">
+            <div class="idx">01</div>
+            <h3>SoundnessBench: A Large-Scale Pre-Execution Benchmark</h3>
+            <p>1,099 research proposals spanning 8 years of top-tier ML submissions (ICLR 2022–2026) and 16 sub-disciplines grounded in real expert peer-review outcomes.</p>
+          </div>
+          <div class="card">
+            <div class="idx">02</div>
+            <h3>High-Precision Multi-Stage Curation Pipeline</h3>
+            <p>Expert-agreement filtering (4,391 human reviews), atomic-claim auditing to prevent benchmark leakage, near-verbatim proposal extraction, and outcome masking ensuring each proposal is faithfully traceable to source evidence.</p>
+          </div>
+          <div class="card">
+            <div class="idx">03</div>
+            <h3>Quantifying the Optimism-Fragility Tradeoff</h3>
+            <p>Empirical study of 12 frontier LLMs revealing systemic failure to identify methodological flaws. We characterize an "optimism bias" (74% FPR) that persists across model scales, families, and instruction-tuning stages.</p>
+          </div>
+          <div class="card">
+            <div class="idx">04</div>
+            <h3>Prompt Fragility as a Core Failure Mode</h3>
+            <p>Aggressive prompting doesn't resolve optimism bias does not improve discrimination; it largely shifts errors from false positives to false negatives.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Benchmark Construction</h2>
+        <p class="lead">SoundnessBench is reconstructed from the ICLR public history. We processed over 35,209 initial submissions and 137,940 expert reviews to distill a high-signal subset with auditable, traceable labels.</p>
+        <div class="figure">
+          <img src="assets/images/dataset_construction-1.png" alt="SoundnessBench pipeline figure" />
+          <p class="caption"><strong>SoundnessBench pipeline:</strong> (1) collect ICLR papers with reviewer metadata and filter for high reviewer agreement; (2) derive high/low-soundness labels; (3) extract near-verbatim research proposal without revealing experimental results; (4) audit extraction fidelity with retrieve-then-verify atomic claims; and (5) assemble the final benchmark.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Dataset Statistics</h2>
+        <p class="lead">The final benchmark contains 1,099 research proposals: 458 low-soundness and 641 high-soundness instances, with clear score separation between classes.</p>
+        <div class="figure">
+          <img src="assets/images/dataset_stats-1.png" alt="SoundnessBench dataset statistics figure" />
+          <p class="caption"><strong>SoundnessBench dataset statistics.</strong> The benchmark includes 1,099 proposals, including 458 low-soundness and 641 high-soundness instances. <strong>(a)</strong> Subfield distribution across papers reflects ICLR corpus composition. <strong>(b)</strong> Soundness score density shows separation between low-soundness (<em>S &lt; 2</em>, mean = 1.77) and high-soundness (<em>S &gt; 3</em>, mean = 3.22) groups, supporting the chosen label boundary. <strong>(c)</strong> Temporal coverage spans ICLR 2022&ndash;2026. <strong>(d)</strong> Low- and high-soundness pair-count statistics in SoundnessBench.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Main Results</h2>
+        <p class="lead">A Consistent Optimism Bias Across All Model Families</p>
+        <div class="figure">
+          <img src="assets/images/main_results-1.png" alt="Main results figure" />
+          <p class="caption">Confusion matrices under the standard prompt across 12 evaluated models. Main message: many models are over-optimistic by default. The mean false-positive rate on low-soundness proposals is 74.0% (9/12 models exceed 70%). This pattern appears across model families in this evaluation setting.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Aggressive Prompting Analysis</h2>
+        <p class="lead">Aggressive Prompting Alone Cannot Fix the Bias</p>
+        <div class="figure">
+          <img src="assets/images/results_aggressive_prompt-1.png" alt="Aggressive prompting results figure" />
+          <p class="caption">Confusion matrices under the aggressive prompt across 12 evaluated models. Main message: optimism bias often shifts toward over-conservatism. The mean false-positive rate on low-soundness proposals drops to 19.9% (10/12 models are below 30%), but recall on high-soundness proposals also drops to 36.1% (7/12 models are below 40%). This illustrates strong prompt sensitivity in scientific-soundness judgment for the evaluated models.</p>
+        </div>
+
+        <div class="takeaways">
+          <div class="takeaway">
+            <div class="tag">Key Takeway 1</div>
+            <p><strong>Frontier LLMs show a broad optimism bias:</strong> models consistently rate proposals as sound regardless of their underlying quality. Under standard prompting the mean false-positive rate on low-soundness proposals is 74.0%.</p>
+          </div>
+          <div class="takeaway">
+            <div class="tag">Key Takeway 2</div>
+            <p><strong>Aggressive prompting does not improve discrimination;</strong> it mainly shifts errors from false positives to false negatives — collapsing high-soundness recall to 36.1% while reducing false positives to 19.9%.</p>
+          </div>
+          <div class="takeaway">
+            <div class="tag">Key Takeway 3</div>
+            <p><strong>Results point to a deeper capability limitation:</strong> optimism bias persists across model scale, instruction tuning, and model family — suggesting reliable scientific judgment will require targeted training, not just better prompting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Related Benchmarks</h2>
+        <p class="lead">Prior benchmarks focus on execution outcomes or post-hoc review of completed papers. SoundnessBench is the only benchmark combining pre-execution evaluation, direct methodological-soundness judgment, and proposal-only input with verified ground truth.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Benchmark</th>
+              <th>Stage</th>
+              <th>Task</th>
+              <th>Input</th>
+              <th>Soundness GT</th>
+              <th>Pre-Exec.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>MLE-Bench</td><td>Execution</td><td>Engineering</td><td>Task + Results</td><td class="bad">✗</td><td class="bad">✗</td></tr>
+            <tr><td>PaperBench</td><td>Execution</td><td>Replication</td><td>Full paper + Results</td><td class="bad">✗</td><td class="bad">✗</td></tr>
+            <tr><td>InnovatorBench</td><td>Execution</td><td>Research loop</td><td>Task + Results</td><td class="bad">✗</td><td class="bad">✗</td></tr>
+            <tr><td>Si et al. (2025)</td><td>Pre-exec.</td><td>Novelty judge</td><td>Proposal</td><td class="bad">✗</td><td class="best">✓</td></tr>
+            <tr><td>Hindsight</td><td>Post-hoc</td><td>Impact pred.</td><td>Idea</td><td class="bad">✗</td><td class="bad">✗</td></tr>
+            <tr><td>RINoBench</td><td>Pre-exec.</td><td>Novelty judge</td><td>Idea + related works</td><td class="bad">✗</td><td class="best">✓</td></tr>
+            <tr><td class="ours">SoundnessBench (Ours)</td><td class="ours">Pre-exec.</td><td class="ours">Methodological soundness</td><td class="ours">Proposal</td><td class="best">✓</td><td class="best">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="bibtex">
+      <div class="container">
+        <h2>Citation</h2>
+        <div class="bibtex">
+          <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+<pre>@inproceedings{TBD,
+  title     = {SoundnessBench: Can Your AI Scientist Really Tell Good Research from Bad?},
+  author    = {Sy-Tuyen Ho, Minghui Liu, Huy Nghiem, Furong Huang},
+  booktitle = {TBD},
+  year      = {2026},
+  note      = {Under review}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      TBD · TBD
+      <span class="small">1,099 proposals · 12 models · 16 subfields · ICLR 2022–2026</span>
+      <span class="small">Adapted in the visual style of Academic Project Page Template.</span>
+    </div>
+  </footer>
+
+  <script>
+    function copyBibtex() {
+      const raw = `@TBD{TBD,
+  title     = {SoundnessBench: Can Your AI Scientist Really Tell Good Research from Bad?},
+  author    = {Sy-Tuyen Ho, Minghui Liu, Huy Nghiem, Furong Huang},
+  booktitle = {TBD},
+  year      = {2026},
+  note      = {Under review}
+}`;
+      navigator.clipboard.writeText(raw).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = old, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
