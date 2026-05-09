@@ -20,7 +20,8 @@
     padding: 0;
 }
 
-img {
+img,
+video {
     max-width: 100%;
     height: auto;
     display: block;
@@ -34,7 +35,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: 'Outfit', sans-serif;
     color: var(--text-main);
 }
@@ -82,7 +86,7 @@ aside#sidebar {
 
 .profile-card {
     background: var(--bg-card);
-    padding: 30px;
+    padding: 24px;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
@@ -90,11 +94,13 @@ aside#sidebar {
 }
 
 .profile-pic {
-    width: 200px;
-    height: 200px;
+    width: 168px;
+    height: auto;
+    aspect-ratio: 496 / 864;
     border-radius: var(--radius);
     object-fit: cover;
-    margin-bottom: 24px;
+    display: block;
+    margin: 0 auto 24px auto;
     box-shadow: var(--shadow-md);
 }
 
@@ -285,6 +291,7 @@ section {
         gap: 16px;
         padding: 16px;
     }
+
     .pub-thumbnail {
         width: 100%;
         height: auto;
