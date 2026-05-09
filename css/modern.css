@@ -20,6 +20,12 @@
     padding: 0;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-body);
@@ -260,8 +266,8 @@ section {
 }
 
 .pub-thumbnail {
-    width: 220px;
-    height: 140px;
+    width: 220px !important;
+    height: 140px !important;
     flex-shrink: 0;
     border-radius: 8px;
     object-fit: cover;
