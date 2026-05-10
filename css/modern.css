@@ -101,7 +101,7 @@ aside#sidebar {
     object-fit: cover;
     display: block;
     margin: 0 auto 24px auto;
-    box-shadow: var(--shadow-md);
+    background: #ffffff;
 }
 
 .profile-name {
